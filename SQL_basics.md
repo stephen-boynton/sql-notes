@@ -101,3 +101,95 @@ first_name DESC;
 ```
 
 ORDER BY allows you to return things in a specific order, duh. ASC = ascending order and DESC = descending order. You choose one, not both. Never both. You can order by multiple columns. ASC is the default.
+
+PostgreSQL allows you ORDER BY a column you didn't even select:
+
+```sql
+SELECT first_name
+FROM customer
+ORDER BY last_name ASC;
+```
+
+Other SQL databases may not allow you to do this, but it's pretty cool you can do it in PostgreSQL. Best practice is to select the column you will be sorting by because not everywhere will let you.
+
+## BETWEEN Statements
+
+```sql
+
+SELECT customer_id, amount
+FROM payment
+WHERE amount BETWEEN 8 AND 9;
+
+SELECT customer_id, amount
+FROM payment
+WHERE amount NOT BETWEEN 8 AND 9;
+
+SELECT payment_date
+FROM payment
+WHERE payment_date BETWEEN '2007-02-07' AND '2007-02-15';
+
+```
+
+We use the BETWEEN operator to match a value against a range of values. Easier way to do between to values (>= and <=).
+
+Also you can use NOT BETWEEN, the opposite.
+
+## IN statement
+
+``` sql
+
+SELECT customer_id, rental_id, return_date
+FROM rental_id
+WHERE customer_id IN (1,2)
+ORDER BY return_date DESC;
+
+SELECT customer_id, rental_id, return_date
+FROM rental_id
+WHERE customer_id NOT IN (1,2)
+ORDER BY return_date DESC;
+
+SELECT customer_id, rental_id, return_date
+FROM rental_id
+WHERE customer_id IN (1,13,10)
+ORDER BY return_date DESC;
+
+```
+
+IN with WHERE to check if value matches any value in list of value.
+
+IN will return faster than using a whole bunch of = and OR/AND statements.
+
+Can also use NOT IN.
+
+## LIKE Statement
+
+```sql
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE 'Jen%';
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE '%y';
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE '%er%';
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE '_her%';
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name NOT LIKE 'Jen%';
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name ILIKE 'jEnN%';
+
+```
+
+Uses pattern matching. The % pattern says find me values that are like 'Jen' and anything after. You can also use wildcard and the `_` for matching a single character. There is also NOT LIKE.
+
+PostgreSQL provides case insensitive version of LIKE -- ILIKE.
